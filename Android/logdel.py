@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import sys, os, re;
 
@@ -11,9 +11,15 @@ for l in sys.stdin:
 	if len(t) < 2:
 		continue
 
-	ts = t[1].split(':')
-	
-	tsInMs = (int(ts[0])*3600 + int(ts[1])*60 + float(ts[2]))*1000
+	try:
+		ts = t[1].split(':')
+		if len(ts) != 3:
+			continue
+
+		tsInMs = (int(ts[0])*3600 + int(ts[1])*60 + float(ts[2]))*1000
+	except (ValueError, IndexError):
+		continue
+
 	#print '%f -- %s ffffffffffffff\n' % ( tsInMs, t[1])
 	if (oldTs > 0):
 		dTs = tsInMs - oldTs
@@ -21,6 +27,6 @@ for l in sys.stdin:
 	#t[0]=tsInMs
 	oline = "%f %f %s" % (dTs, tsInMs, " ".join(t))
 
-	print oline
+	print(oline)
 	oldTs = tsInMs
 
